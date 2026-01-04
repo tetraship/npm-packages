@@ -1,0 +1,24 @@
+{
+  "name": "@tetraship/react-glass",
+  "version": "1.0.0",
+  "description": "Tetraship React glassmorphism components",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "echo 'Build not yet configured'",
+    "test": "echo 'Tests not yet configured'",
+    "lint": "echo 'Lint not yet configured'",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "react",
+    "glassmorphism",
+    "components",
+    "tetraship"
+  ],
+  "author": "Tetraship",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}
