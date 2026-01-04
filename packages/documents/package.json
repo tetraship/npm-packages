@@ -2,13 +2,12 @@
   "name": "@tetraship/documents",
   "version": "1.0.0",
   "description": "Tetraship document management utilities",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "index.js",
   "scripts": {
     "build": "echo 'Build not yet configured'",
     "test": "echo 'Tests not yet configured'",
     "lint": "echo 'Lint not yet configured'",
-    "clean": "rm -rf dist"
+    "clean": "echo 'Clean not yet configured'"
   },
   "keywords": [
     "documents",
