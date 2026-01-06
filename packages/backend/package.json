@@ -1,0 +1,21 @@
+{
+  "name": "@tetraship/backend",
+  "version": "1.0.0",
+  "description": "Tetraship backend utilities",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'Build not yet configured'",
+    "test": "echo 'Tests not yet configured'",
+    "lint": "echo 'Lint not yet configured'",
+    "clean": "echo 'Clean not yet configured'"
+  },
+  "keywords": [
+    "backend",
+    "tetraship"
+  ],
+  "author": "Tetraship",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}

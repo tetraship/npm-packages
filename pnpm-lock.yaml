@@ -1,0 +1,19 @@
+lockfileVersion: '6.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .: {}
+
+  packages/backend: {}
+
+  packages/documents: {}
+
+  packages/facets: {}
+
+  packages/react-glass: {}
+
+  packages/threads: {}

@@ -1,0 +1,20 @@
+{
+  "name": "@tetraship/npm-packages",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monorepo for Tetraship npm packages",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "clean": "pnpm -r clean"
+  },
+  "keywords": [
+    "monorepo",
+    "pnpm",
+    "workspace"
+  ],
+  "author": "Tetraship",
+  "license": "MIT",
+  "packageManager": "pnpm@8.0.0"
+}

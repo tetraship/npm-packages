@@ -1,0 +1,21 @@
+{
+  "name": "@tetraship/facets",
+  "version": "1.0.0",
+  "description": "Tetraship facet utilities",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'Build not yet configured'",
+    "test": "echo 'Tests not yet configured'",
+    "lint": "echo 'Lint not yet configured'",
+    "clean": "echo 'Clean not yet configured'"
+  },
+  "keywords": [
+    "facets",
+    "tetraship"
+  ],
+  "author": "Tetraship",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}
