@@ -65,10 +65,13 @@ Please read [AGENTS.md](./AGENTS.md) for details on our AI agent workflows and c
 
 This repository uses GitHub Actions for continuous integration and deployment:
 
-- **Changed Files Detection**: Uses [tj-actions/changed-files](https://github.com/tj-actions/changed-files) to only build changed packages
-- **Semantic Release**: Uses [cycjimmy/semantic-release-action](https://github.com/marketplace/actions/action-for-semantic-release) to automatically version and publish packages
-
-See [.github/workflows/copilot-setup-steps.yml](./.github/workflows/copilot-setup-steps.yml) for the full workflow configuration.
+- **Copilot Setup**: [copilot-setup-steps.yml](./.github/workflows/copilot-setup-steps.yml) - Sets up the environment for GitHub Copilot
+- **CI Pipeline**: [ci.yml](./.github/workflows/ci.yml) - Builds and tests changed packages on push and pull requests
+  - Uses [tj-actions/changed-files](https://github.com/tj-actions/changed-files) to detect changed packages
+  - Only builds and tests packages that have changed
+- **Release Pipeline**: [release.yml](./.github/workflows/release.yml) - Automatically versions and publishes packages
+  - Uses [cycjimmy/semantic-release-action](https://github.com/marketplace/actions/action-for-semantic-release) for automated releases
+  - Runs on pushes to main branch
 
 ## 📄 License
 

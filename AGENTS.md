@@ -15,25 +15,44 @@ This repository is optimized for use with GitHub Copilot Workspace. The workspac
 
 ## 🔄 Automated Workflows
 
-### copilot-setup-steps Workflow
+### Copilot Setup Steps Workflow
 
-The main CI/CD workflow (`copilot-setup-steps.yml`) automates the following tasks:
+The `copilot-setup-steps.yml` workflow sets up the environment for GitHub Copilot to work effectively:
+
+- Installs pnpm and Node.js
+- Installs project dependencies
+- Runs automatically when the workflow file changes
+- Can be manually triggered via workflow_dispatch
+
+### CI Workflow
+
+The CI workflow (`ci.yml`) automates testing and validation:
 
 #### 1. Change Detection
 - Uses [tj-actions/changed-files](https://github.com/tj-actions/changed-files) to detect which packages have been modified
 - Only builds and tests packages that have changed, improving CI efficiency
-- Determines which packages need to be released
+- Runs on all pushes and pull requests
 
 #### 2. Build and Test
 - Runs build and test commands for changed packages
 - Ensures code quality before merging
 - Validates that changes don't break existing functionality
+- Executes linting for code style consistency
 
-#### 3. Semantic Release
+### Release Workflow
+
+The release workflow (`release.yml`) automates package publishing:
+
+#### 1. Change Detection
+- Detects which packages have changed since the last release
+- Only releases packages that have been modified
+
+#### 2. Semantic Release
 - Uses [cycjimmy/semantic-release-action](https://github.com/marketplace/actions/action-for-semantic-release) for automated versioning
 - Follows [Conventional Commits](https://www.conventionalcommits.org/) specification
 - Automatically generates changelogs
 - Publishes packages to npm registry when changes are merged to main
+- Runs only on pushes to the main branch
 
 ## 📋 Commit Convention
 
