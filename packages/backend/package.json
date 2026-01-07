@@ -2,14 +2,14 @@
 	"name": "@tetraship/backend",
 	"version": "1.0.0",
 	"description": "Tetraship backend utilities",
-	"main": "./src/index.ts",
-	"types": "./src/index.ts",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"exports": {
-		".": "./src/index.ts",
-		"./auth": "./src/auth/index.ts",
-		"./database": "./src/database/index.ts",
-		"./uploads": "./src/uploads/index.ts",
-		"./utils": "./src/utils/index.ts"
+		".": "./dist/index.js",
+		"./auth": "./dist/auth/index.js",
+		"./database": "./dist/database/index.js",
+		"./uploads": "./dist/uploads/index.js",
+		"./utils": "./dist/utils/index.js"
 	},
 	"scripts": {
 		"build": "tsc",
