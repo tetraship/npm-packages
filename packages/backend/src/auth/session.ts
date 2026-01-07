@@ -10,75 +10,75 @@
  *    the standard Auth.js sign-in flow
  */
 
-import { encode } from 'next-auth/jwt';
-import { cookies } from 'next/headers';
+import { cookies } from "next/headers";
+import { encode } from "next-auth/jwt";
 
 /**
  * User data required to create a session token
  */
 export interface SessionUser {
-  id: string;
-  email: string;
-  name: string | null;
-  image?: string | null;
-  admin?: boolean;
-  /** Additional custom properties to include in the token */
-  [key: string]: unknown;
+	id: string;
+	email: string;
+	name: string | null;
+	image?: string | null;
+	admin?: boolean;
+	/** Additional custom properties to include in the token */
+	[key: string]: unknown;
 }
 
 /**
  * Configuration for the session helper factory
  */
 export interface SessionHelperConfig {
-  /**
-   * Cookie name to use for the session.
-   * @default "authjs.session-token"
-   */
-  cookieName?: string;
+	/**
+	 * Cookie name to use for the session.
+	 * @default "authjs.session-token"
+	 */
+	cookieName?: string;
 
-  /**
-   * Whether to set the secure flag on the cookie (requires HTTPS).
-   * @default true when NODE_ENV === "production", false otherwise
-   */
-  secure?: boolean;
+	/**
+	 * Whether to set the secure flag on the cookie (requires HTTPS).
+	 * @default true when NODE_ENV === "production", false otherwise
+	 */
+	secure?: boolean;
 
-  /**
-   * Session duration in seconds.
-   * @default 2592000 (30 days)
-   */
-  maxAge?: number;
+	/**
+	 * Session duration in seconds.
+	 * @default 2592000 (30 days)
+	 */
+	maxAge?: number;
 
-  /**
-   * Auth secret. If not provided, reads from AUTH_SECRET or NEXTAUTH_SECRET env vars.
-   */
-  secret?: string;
+	/**
+	 * Auth secret. If not provided, reads from AUTH_SECRET or NEXTAUTH_SECRET env vars.
+	 */
+	secret?: string;
 }
 
 /**
  * Return type of createSessionHelpers
  */
 export interface SessionHelpers {
-  /**
-   * Create a JWT session token for a user.
-   * This token can be set as a cookie to authenticate the user.
-   */
-  createSessionToken: (user: SessionUser) => Promise<string>;
+	/**
+	 * Create a JWT session token for a user.
+	 * This token can be set as a cookie to authenticate the user.
+	 */
+	createSessionToken: (user: SessionUser) => Promise<string>;
 
-  /**
-   * Set the session cookie with the provided token.
-   * Uses Next.js cookies() API - only works in Server Components/Actions/Route Handlers.
-   */
-  setSessionCookie: (sessionToken: string) => Promise<void>;
+	/**
+	 * Set the session cookie with the provided token.
+	 * Uses Next.js cookies() API - only works in Server Components/Actions/Route Handlers.
+	 */
+	setSessionCookie: (sessionToken: string) => Promise<void>;
 
-  /**
-   * Convenience method: create token and set cookie in one call.
-   */
-  createAndSetSession: (user: SessionUser) => Promise<string>;
+	/**
+	 * Convenience method: create token and set cookie in one call.
+	 */
+	createAndSetSession: (user: SessionUser) => Promise<string>;
 
-  /**
-   * Get the cookie name being used (useful for Playwright tests).
-   */
-  getCookieName: () => string;
+	/**
+	 * Get the cookie name being used (useful for Playwright tests).
+	 */
+	getCookieName: () => string;
 }
 
 /**
@@ -133,71 +133,71 @@ export interface SessionHelpers {
  * ```
  */
 export function createSessionHelpers(
-  config: SessionHelperConfig = {},
+	config: SessionHelperConfig = {},
 ): SessionHelpers {
-  const {
-    cookieName = 'authjs.session-token',
-    secure = process.env.NODE_ENV === 'production',
-    maxAge = 30 * 24 * 60 * 60, // 30 days
-    secret: configSecret,
-  } = config;
+	const {
+		cookieName = "authjs.session-token",
+		secure = process.env.NODE_ENV === "production",
+		maxAge = 30 * 24 * 60 * 60, // 30 days
+		secret: configSecret,
+	} = config;
 
-  const getSecret = (): string => {
-    const secret =
-      configSecret || process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
-    if (!secret) {
-      throw new Error('AUTH_SECRET or NEXTAUTH_SECRET is not set');
-    }
-    return secret;
-  };
+	const getSecret = (): string => {
+		const secret =
+			configSecret || process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
+		if (!secret) {
+			throw new Error("AUTH_SECRET or NEXTAUTH_SECRET is not set");
+		}
+		return secret;
+	};
 
-  const getCookieName = (): string => cookieName;
+	const getCookieName = (): string => cookieName;
 
-  const createSessionToken = async (user: SessionUser): Promise<string> => {
-    const secret = getSecret();
+	const createSessionToken = async (user: SessionUser): Promise<string> => {
+		const secret = getSecret();
 
-    // Extract known properties and spread the rest
-    const { id, email, name, image, admin, ...rest } = user;
+		// Extract known properties and spread the rest
+		const { id, email, name, image, admin, ...rest } = user;
 
-    const token = await encode({
-      token: {
-        id,
-        email,
-        name,
-        picture: image,
-        admin: admin ?? false,
-        ...rest,
-      },
-      secret,
-      salt: cookieName, // Salt must match the cookie name for Auth.js
-      maxAge,
-    });
+		const token = await encode({
+			token: {
+				id,
+				email,
+				name,
+				picture: image,
+				admin: admin ?? false,
+				...rest,
+			},
+			secret,
+			salt: cookieName, // Salt must match the cookie name for Auth.js
+			maxAge,
+		});
 
-    return token;
-  };
+		return token;
+	};
 
-  const setSessionCookie = async (sessionToken: string): Promise<void> => {
-    const cookieStore = await cookies();
+	const setSessionCookie = async (sessionToken: string): Promise<void> => {
+		const cookieStore = await cookies();
 
-    cookieStore.set(cookieName, sessionToken, {
-      httpOnly: true,
-      secure,
-      sameSite: 'lax',
-      path: '/',
-      maxAge,
-    });
-  };
+		cookieStore.set(cookieName, sessionToken, {
+			httpOnly: true,
+			secure,
+			sameSite: "lax",
+			path: "/",
+			maxAge,
+		});
+	};
 
-  const createAndSetSession = async (user: SessionUser): Promise<string> => {
-    const token = await createSessionToken(user);
-    await setSessionCookie(token);
-    return token;
-  };
+	const createAndSetSession = async (user: SessionUser): Promise<string> => {
+		const token = await createSessionToken(user);
+		await setSessionCookie(token);
+		return token;
+	};
 
-  return {
-    createSessionToken,
-    setSessionCookie,
-    createAndSetSession,
-    getCookieName,
-  };
+	return {
+		createSessionToken,
+		setSessionCookie,
+		createAndSetSession,
+		getCookieName,
+	};
 }
