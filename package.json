@@ -6,7 +6,10 @@
   "scripts": {
     "build": "pnpm -r build",
     "test": "pnpm -r test",
-    "lint": "pnpm -r lint",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format .",
+    "format:fix": "biome format --write .",
     "clean": "pnpm -r clean"
   },
   "keywords": [
@@ -17,6 +20,7 @@
   "author": "Tetraship",
   "license": "MIT",
   "devDependencies": {
+    "@biomejs/biome": "2.3.11",
     "vitest": "^1.0.0"
   },
   "pnpm": {
