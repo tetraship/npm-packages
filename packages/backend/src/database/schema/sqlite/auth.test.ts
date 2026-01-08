@@ -1,4 +1,4 @@
-import Database from "better-sqlite3";
+import Database from "libsql";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createAuthTables } from "./auth";
