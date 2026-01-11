@@ -16,13 +16,55 @@ A reusable React component for rendering Markdown content using `next-mdx-remote
 npm install @tetraship/react-markdown
 ```
 
+## Styling
+
+The components in this package rely on **Tailwind CSS** and a specific **semantic theme**.
+
+### 1. Tailwind Content Scanning
+
+To ensure the Tailwind classes used by this package are generated, you must include the package source in your Tailwind configuration.
+
+**Tailwind CSS v4 (Recommended):**
+Add the `@source` directive to your global CSS file:
+
+```css
+@import 'tailwindcss';
+@source "../path/to/node_modules/@tetraship/react-markdown/src";
+```
+
+**Tailwind CSS v3:**
+Add the package to your `content` array in `tailwind.config.js`:
+
+```javascript
+module.exports = {
+  content: [
+    // ...
+    "./node_modules/@tetraship/react-markdown/src/**/*.{ts,tsx}",
+  ],
+  // ...
+}
+```
+
+### 2. Semantic Tokens
+
+The markdown components use semantic color tokens. Ensure your theme defines the following (or provides fallbacks):
+
+- `primary`: Main accent color.
+- `on-surface`: Primary text color on surfaces.
+- `on-surface-variant`: Secondary text color.
+- `surface-variant`: Background for code blocks and blockquotes.
+- `outline`: Border colors.
+
+### 3. Syntax Highlighting
+
+Syntax highlighting styles (GitHub Dark theme) are **automatically included** when you import the `MarkdownRenderer` component. No additional CSS imports are required for highlighting to work.
+
 ## Usage
 
-Import the component and the styles (if not already included globally).
+Import the component and provide the markdown content.
 
-````tsx
+```tsx
 import { MarkdownRenderer } from "@tetraship/react-markdown";
-import "@tetraship/react-markdown/styles.css"; // Or import in layout
 
 export default function MyPage() {
   const content = `
@@ -32,13 +74,12 @@ This is a **markdown** example.
 
 ```typescript
 const x = 1;
-````
-
+```
 `;
 
-return <MarkdownRenderer content={content} />;
+  return <MarkdownRenderer content={content} />;
 }
-````
+```
 
 ## Props
 

@@ -2,6 +2,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeHighlight from "rehype-highlight";
 import remarkGfm from "remark-gfm";
 import { markdownComponents, sanitizeMarkdown } from "./components";
+import "./styles.css";
 
 /**
  * Markdown Renderer Component (Server Side)

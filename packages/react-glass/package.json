@@ -7,6 +7,7 @@
   "exports": {
     ".": "./index.ts",
     "./GlassSurface": "./src/lib/glass-components/GlassSurface.tsx",
+    "./GlassNav": "./src/lib/glass-components/GlassNav.tsx",
     "./GlassCard": "./src/lib/glass-components/GlassCard.tsx",
     "./GlassButton": "./src/lib/glass-components/GlassButton.tsx",
     "./GlassInput": "./src/lib/glass-components/GlassInput.tsx",

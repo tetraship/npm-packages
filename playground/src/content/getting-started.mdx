@@ -1,0 +1,35 @@
+# Getting Started
+
+Welcome to the **Tetraship** packages! This repository contains a set of reusable packages for building modern web applications.
+
+## Packages
+
+- **@tetraship/react-glass**: A glass-morphism UI component library.
+- **@tetraship/react-markdown**: React components for rendering Markdown/MDX.
+- **@tetraship/backend**: Backend utilities and database schemas.
+
+## Installation
+
+```bash
+pnpm install @tetraship/react-glass @tetraship/react-markdown
+```
+
+## Usage
+
+### React Glass
+
+Wrap your application in the `TopNavProvider` and use `DynamicApplicationLayout` for dynamic navigation.
+
+```tsx
+import { TopNavProvider, DynamicApplicationLayout } from '@tetraship/react-glass';
+
+export default function Layout({ children }) {
+  return (
+    <TopNavProvider>
+       <DynamicApplicationLayout>
+         {children}
+       </DynamicApplicationLayout>
+    </TopNavProvider>
+  );
+}
+```

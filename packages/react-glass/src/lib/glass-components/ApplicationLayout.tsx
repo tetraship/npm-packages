@@ -1,5 +1,6 @@
 import React from 'react';
 import { GlassCard } from './GlassCard';
+import { GlassNav } from './GlassNav';
 import { cn } from './utils';
 
 export interface ApplicationLayoutProps {
@@ -32,6 +33,11 @@ export interface ApplicationLayoutProps {
    * @default 'wrap'
    */
   headerLayout?: 'wrap' | 'stack' | 'inline';
+  /**
+   * Complete navbar content. If provided, overrides header and nav props.
+   * Useful for dynamic layouts via TopNav context.
+   */
+  navbarContent?: React.ReactNode;
 }
 
 /**
@@ -70,6 +76,7 @@ export function ApplicationLayout({
   children,
   className,
   headerLayout = 'wrap',
+  navbarContent,
 }: ApplicationLayoutProps) {
   // Determine header flex layout based on headerLayout prop
   const headerLayoutClasses = {
@@ -83,15 +90,20 @@ export function ApplicationLayout({
     <div
       className={cn('min-h-screen flex flex-col gap-6 p-4 sm:p-6', className)}
     >
-      <GlassCard
-        glass={false}
-        className={cn('sticky top-4 z-50', headerLayoutClasses[headerLayout])}
+      <GlassNav
+        className={cn('sticky top-4 z-50 rounded-xl border border-white/20 dark:border-white/10 p-6', headerLayoutClasses[headerLayout])}
       >
-        <div className="text-lg font-semibold text-on-surface min-w-0 flex-shrink">
-          {header}
-        </div>
-        {nav && <div className="flex-shrink-0">{nav}</div>}
-      </GlassCard>
+        {navbarContent ? (
+          navbarContent
+        ) : (
+          <>
+            <div className="text-lg font-semibold text-on-surface min-w-0 flex-shrink">
+              {header}
+            </div>
+            {nav && <div className="flex-shrink-0">{nav}</div>}
+          </>
+        )}
+      </GlassNav>
 
       <main className="flex-1">{children}</main>
     </div>

@@ -12,3 +12,4 @@ This package provides markdown rendering capabilities.
 
 - Keep dependencies updated (`next-mdx-remote`, `remark-gfm`, `rehype-highlight`).
 - Ensure styles match the design system.
+- Remind consumers to include the package source in their Tailwind configuration (e.g., using `@source` in Tailwind v4) to ensure classes are generated.
