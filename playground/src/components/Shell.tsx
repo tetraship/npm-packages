@@ -8,6 +8,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
   const navOptions: ApplicationLayoutNavOption[] = [
     { value: '/', label: 'Home', href: '/' },
+    { value: '/chat', label: 'Chat', href: '/chat' },
+    { value: '/threads', label: 'Threads', href: '/threads' },
     { value: '/docs/getting-started', label: 'Docs', href: '/docs/getting-started' },
     { value: '/entity/1', label: 'Entity 1', href: '/entity/1' },
     { value: '/blog', label: 'Blog', href: '/blog' },

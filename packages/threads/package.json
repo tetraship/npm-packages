@@ -1,21 +1,46 @@
 {
-	"name": "@tetraship/threads",
-	"version": "1.0.0",
-	"description": "Tetraship threading utilities",
-	"main": "index.js",
-	"scripts": {
-		"build": "echo 'Build not yet configured'",
-		"test": "echo 'Tests not yet configured'",
-		"lint": "echo 'Lint not yet configured'",
-		"clean": "echo 'Clean not yet configured'"
-	},
-	"keywords": [
-		"threads",
-		"tetraship"
-	],
-	"author": "Tetraship",
-	"license": "MIT",
-	"publishConfig": {
-		"access": "public"
-	}
+  "name": "@tetraship/threads",
+  "version": "1.0.0",
+  "private": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./database": "./dist/database/index.js",
+    "./models": "./dist/models/index.js",
+    "./types": "./dist/types/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@tetraship/backend": "workspace:*",
+    "drizzle-orm": "^0.44.3",
+    "drizzle-zod": "^0.8.0",
+    "zod": "^4.0.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "@ai-sdk/react": ">=1.0.0",
+    "libsql": "^0.4.0 || ^0.5.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "@ai-sdk/react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "libsql": "^0.5.0",
+    "typescript": "^5.0.0",
+    "vitest": "^2.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }
