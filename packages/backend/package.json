@@ -1,7 +1,7 @@
 {
 	"name": "@tetraship/backend",
 	"version": "1.0.0",
-	"description": "Tetraship backend utilities",
+	"description": "Tetraship backend utilities and shared modules",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
