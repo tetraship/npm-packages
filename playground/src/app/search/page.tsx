@@ -3,79 +3,104 @@ import { GlassCombobox, GlassCard, type ComboboxItem } from '@tetraship/react-gl
 import { useState } from 'react';
 import Link from 'next/link';
 
+// Extended type for searchable items with metadata
+interface SearchableItem extends ComboboxItem {
+  type: 'Blog Post' | 'Entity';
+  url: string;
+}
+
 // Mock data for blog posts
-const blogPosts: ComboboxItem[] = [
+const blogPosts: SearchableItem[] = [
   {
     id: 'blog-1',
     label: 'Getting Started with React Glass',
     description: 'Learn how to use glassmorphism components in your React app',
+    type: 'Blog Post',
+    url: '/blog',
   },
   {
     id: 'blog-2',
     label: 'Advanced TypeScript Patterns',
     description: 'Deep dive into TypeScript design patterns and best practices',
+    type: 'Blog Post',
+    url: '/blog',
   },
   {
     id: 'blog-3',
     label: 'Building Modern Web Applications',
     description: 'A comprehensive guide to modern web development',
+    type: 'Blog Post',
+    url: '/blog',
   },
   {
     id: 'blog-4',
     label: 'State Management in React',
     description: 'Understanding different state management solutions',
+    type: 'Blog Post',
+    url: '/blog',
   },
   {
     id: 'blog-5',
     label: 'CSS Grid and Flexbox Mastery',
     description: 'Master modern CSS layout techniques',
+    type: 'Blog Post',
+    url: '/blog',
   },
 ];
 
 // Mock data for entities
-const entities: ComboboxItem[] = [
+const entities: SearchableItem[] = [
   {
     id: 'entity-1',
     label: 'Alpha Corporation',
     description: 'Technology company specializing in AI solutions',
+    type: 'Entity',
+    url: '/entity/1',
   },
   {
     id: 'entity-2',
     label: 'Beta Industries',
     description: 'Manufacturing and logistics provider',
+    type: 'Entity',
+    url: '/entity/2',
   },
   {
     id: 'entity-3',
     label: 'Gamma Research Lab',
     description: 'Research institution focused on quantum computing',
+    type: 'Entity',
+    url: '/entity/3',
   },
   {
     id: 'entity-4',
     label: 'Delta Ventures',
     description: 'Venture capital firm investing in startups',
+    type: 'Entity',
+    url: '/entity/4',
   },
   {
     id: 'entity-5',
     label: 'Epsilon Solutions',
     description: 'Cloud infrastructure and DevOps services',
+    type: 'Entity',
+    url: '/entity/5',
   },
   {
     id: 'entity-6',
     label: 'Zeta Technologies',
     description: 'Blockchain and cryptocurrency platform',
+    type: 'Entity',
+    url: '/entity/6',
   },
 ];
 
 // Combine all searchable items
-const allItems: ComboboxItem[] = [
-  ...blogPosts.map(item => ({ ...item, type: 'Blog Post' })),
-  ...entities.map(item => ({ ...item, type: 'Entity' })),
-] as ComboboxItem[];
+const allItems: SearchableItem[] = [...blogPosts, ...entities];
 
 export default function SearchPage() {
-  const [selectedBlogPost, setSelectedBlogPost] = useState<ComboboxItem | null>(null);
-  const [selectedEntity, setSelectedEntity] = useState<ComboboxItem | null>(null);
-  const [selectedItem, setSelectedItem] = useState<ComboboxItem | null>(null);
+  const [selectedBlogPost, setSelectedBlogPost] = useState<SearchableItem | null>(null);
+  const [selectedEntity, setSelectedEntity] = useState<SearchableItem | null>(null);
+  const [selectedItem, setSelectedItem] = useState<SearchableItem | null>(null);
 
   return (
     <div className="p-8 max-w-4xl mx-auto space-y-8">
@@ -94,18 +119,18 @@ export default function SearchPage() {
           placeholder="Search blog posts and entities..."
           label="Global Search"
           onSelect={(item) => {
-            setSelectedItem(item);
+            setSelectedItem(item as SearchableItem | null);
           }}
         />
         {selectedItem && (
           <div className="mt-4 p-4 bg-white/5 rounded-lg">
             <p className="text-sm text-gray-400 uppercase tracking-wider">
-              {(selectedItem as any).type}
+              {selectedItem.type}
             </p>
             <h3 className="text-lg font-medium text-white mt-1">{selectedItem.label}</h3>
             <p className="text-gray-300 mt-1">{selectedItem.description}</p>
             <Link 
-              href={selectedItem.id.startsWith('blog') ? '/blog' : `/entity/${selectedItem.id.split('-')[1]}`}
+              href={selectedItem.url}
               className="inline-block mt-3 text-blue-400 hover:text-blue-300 transition-colors"
             >
               View Details →
@@ -122,7 +147,7 @@ export default function SearchPage() {
           placeholder="Search blog posts..."
           label="Blog Posts"
           onSelect={(item) => {
-            setSelectedBlogPost(item);
+            setSelectedBlogPost(item as SearchableItem | null);
           }}
         />
         {selectedBlogPost && (
@@ -130,7 +155,7 @@ export default function SearchPage() {
             <h3 className="text-lg font-medium text-white">{selectedBlogPost.label}</h3>
             <p className="text-gray-300 mt-1">{selectedBlogPost.description}</p>
             <Link 
-              href="/blog"
+              href={selectedBlogPost.url}
               className="inline-block mt-3 text-blue-400 hover:text-blue-300 transition-colors"
             >
               Read Article →
@@ -148,7 +173,7 @@ export default function SearchPage() {
           label="Entities"
           intensity="medium"
           onSelect={(item) => {
-            setSelectedEntity(item);
+            setSelectedEntity(item as SearchableItem | null);
           }}
         />
         {selectedEntity && (
@@ -156,7 +181,7 @@ export default function SearchPage() {
             <h3 className="text-lg font-medium text-white">{selectedEntity.label}</h3>
             <p className="text-gray-300 mt-1">{selectedEntity.description}</p>
             <Link 
-              href={`/entity/${selectedEntity.id.split('-')[1]}`}
+              href={selectedEntity.url}
               className="inline-block mt-3 text-blue-400 hover:text-blue-300 transition-colors"
             >
               View Entity →
