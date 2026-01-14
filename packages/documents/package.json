@@ -1,6 +1,6 @@
 {
 	"name": "@tetraship/documents",
-	"version": "1.0.0",
+	"version": "0.0.1",
 	"description": "Tetraship document management utilities",
 	"main": "index.js",
 	"scripts": {

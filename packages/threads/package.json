@@ -1,6 +1,6 @@
 {
   "name": "@tetraship/threads",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Universal thread and activity persistence layer",
   "private": false,
   "main": "./dist/index.js",
