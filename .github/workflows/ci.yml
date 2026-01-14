@@ -89,7 +89,7 @@ jobs:
         if: matrix.package.changed == 'true'
         uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 10
 
       - name: Setup Node.js
         if: matrix.package.changed == 'true'
@@ -102,9 +102,9 @@ jobs:
         if: matrix.package.changed == 'true'
         run: pnpm install --frozen-lockfile
 
-      - name: Build package
+      - name: Build package and dependencies
         if: matrix.package.changed == 'true'
-        run: pnpm --filter @tetraship/${{ matrix.package.name }} build
+        run: pnpm --filter @tetraship/${{ matrix.package.name }}... build
 
       - name: Test package
         if: matrix.package.changed == 'true'
