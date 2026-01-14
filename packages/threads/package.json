@@ -5,10 +5,22 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./dist/index.js",
-    "./database": "./dist/database/index.js",
-    "./models": "./dist/models/index.js",
-    "./types": "./dist/types/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./database": {
+      "types": "./dist/database/index.d.ts",
+      "default": "./dist/database/index.js"
+    },
+    "./models": {
+      "types": "./dist/models/index.d.ts",
+      "default": "./dist/models/index.js"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "default": "./dist/types/index.js"
+    }
   },
   "scripts": {
     "build": "tsc",

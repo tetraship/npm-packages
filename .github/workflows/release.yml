@@ -113,9 +113,9 @@ jobs:
         if: matrix.package.changed == 'true'
         run: pnpm install --frozen-lockfile
 
-      - name: Build package
+      - name: Build package and dependencies
         if: matrix.package.changed == 'true'
-        run: pnpm --filter @tetraship/${{ matrix.package.name }} build
+        run: pnpm --filter @tetraship/${{ matrix.package.name }}... build
 
       - name: Semantic Release
         if: matrix.package.changed == 'true'

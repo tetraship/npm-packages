@@ -5,11 +5,26 @@
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
-		".": "./dist/index.js",
-		"./auth": "./dist/auth/index.js",
-		"./database": "./dist/database/index.js",
-		"./uploads": "./dist/uploads/index.js",
-		"./utils": "./dist/utils/index.js"
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./auth": {
+			"types": "./dist/auth/index.d.ts",
+			"default": "./dist/auth/index.js"
+		},
+		"./database": {
+			"types": "./dist/database/index.d.ts",
+			"default": "./dist/database/index.js"
+		},
+		"./uploads": {
+			"types": "./dist/uploads/index.d.ts",
+			"default": "./dist/uploads/index.js"
+		},
+		"./utils": {
+			"types": "./dist/utils/index.d.ts",
+			"default": "./dist/utils/index.js"
+		}
 	},
 	"scripts": {
 		"build": "tsc",
