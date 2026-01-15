@@ -20,6 +20,7 @@ jobs:
       threads_changed: ${{ steps.changed-files.outputs.threads_any_changed }}
       react_glass_changed: ${{ steps.changed-files.outputs.react_glass_any_changed }}
       react_markdown_changed: ${{ steps.changed-files.outputs.react_markdown_any_changed }}
+      react_agent_chat_changed: ${{ steps.changed-files.outputs.react_agent_chat_any_changed }}
       documents_changed: ${{ steps.changed-files.outputs.documents_any_changed }}
       facets_changed: ${{ steps.changed-files.outputs.facets_any_changed }}
       any_changed: ${{ steps.check-any.outputs.any_changed }}
@@ -42,6 +43,8 @@ jobs:
               - 'packages/react-glass/**'
             react_markdown:
               - 'packages/react-markdown/**'
+            react_agent_chat:
+              - 'packages/react-agent-chat/**'
             documents:
               - 'packages/documents/**'
             facets:
@@ -54,6 +57,7 @@ jobs:
              [ "${{ steps.changed-files.outputs.threads_any_changed }}" == "true" ] || \
              [ "${{ steps.changed-files.outputs.react_glass_any_changed }}" == "true" ] || \
              [ "${{ steps.changed-files.outputs.react_markdown_any_changed }}" == "true" ] || \
+             [ "${{ steps.changed-files.outputs.react_agent_chat_any_changed }}" == "true" ] || \
              [ "${{ steps.changed-files.outputs.documents_any_changed }}" == "true" ] || \
              [ "${{ steps.changed-files.outputs.facets_any_changed }}" == "true" ]; then
             echo "any_changed=true" >> $GITHUB_OUTPUT
@@ -82,6 +86,9 @@ jobs:
           - name: react-markdown
             path: packages/react-markdown
             changed: ${{ needs.detect-changes.outputs.react_markdown_changed }}
+          - name: react-agent-chat
+            path: packages/react-agent-chat
+            changed: ${{ needs.detect-changes.outputs.react_agent_chat_changed }}
           - name: documents
             path: packages/documents
             changed: ${{ needs.detect-changes.outputs.documents_changed }}
