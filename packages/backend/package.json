@@ -33,7 +33,10 @@
 	},
 	"keywords": [
 		"backend",
-		"tetraship"
+		"tetraship",
+		"utilities",
+		"auth",
+		"database"
 	],
 	"author": "Tetraship",
 	"license": "MIT",
