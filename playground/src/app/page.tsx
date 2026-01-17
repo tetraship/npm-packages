@@ -10,12 +10,15 @@ export default function Home() {
           Welcome to the playground. Explore the new navigation features and components.
         </p>
         <div className="flex flex-col gap-4">
-            <div className="flex gap-4 justify-center">
+            <div className="flex gap-4 justify-center flex-wrap">
             <Link href="/docs/getting-started">
                 <GlassButton variant="primary">Getting Started (MDX)</GlassButton>
             </Link>
             <Link href="/entity/1">
                 <GlassButton variant="secondary">View Mock Entity</GlassButton>
+            </Link>
+            <Link href="/search">
+                <GlassButton variant="secondary">Search Demo</GlassButton>
             </Link>
             </div>
              <Link href="/api/auth/signin" className="opacity-70 hover:opacity-100 transition-opacity">

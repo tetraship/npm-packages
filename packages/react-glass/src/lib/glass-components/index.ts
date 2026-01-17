@@ -41,6 +41,9 @@ export type { GlassInputProps } from './GlassInput';
 export { GlassSelect } from './GlassSelect';
 export type { GlassSelectProps } from './GlassSelect';
 
+export { GlassCombobox } from './GlassCombobox';
+export type { GlassComboboxProps, ComboboxItem } from './GlassCombobox';
+
 export { GlassIncrementor } from './GlassIncrementor';
 export type { GlassIncrementorProps } from './GlassIncrementor';
 

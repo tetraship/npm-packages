@@ -32,6 +32,7 @@ function MyComponent() {
 - GlassButton
 - GlassInput
 - GlassSelect
+- GlassCombobox - Searchable dropdown with autocomplete using Downshift
 - GlassIncrementor
 - Breadcrumbs
 - GlassPopover

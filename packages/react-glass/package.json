@@ -12,6 +12,7 @@
     "./GlassButton": "./src/lib/glass-components/GlassButton.tsx",
     "./GlassInput": "./src/lib/glass-components/GlassInput.tsx",
     "./GlassSelect": "./src/lib/glass-components/GlassSelect.tsx",
+    "./GlassCombobox": "./src/lib/glass-components/GlassCombobox.tsx",
     "./GlassIncrementor": "./src/lib/glass-components/GlassIncrementor.tsx",
     "./Breadcrumbs": "./src/lib/glass-components/Breadcrumbs.tsx",
     "./GlassPopover": "./src/lib/glass-components/GlassPopover.tsx",
@@ -27,6 +28,7 @@
     "@heroicons/react": "^2.2.0",
     "@radix-ui/react-popover": "^1.1.0",
     "clsx": "^2.1.1",
+    "downshift": "^9.0.13",
     "tailwind-merge": "^3.3.1"
   },
   "peerDependencies": {
