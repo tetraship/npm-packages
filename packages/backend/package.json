@@ -43,8 +43,14 @@
 	],
 	"author": "Tetraship",
 	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/tetraship/npm-packages.git",
+		"directory": "packages/backend"
+	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"provenance": true
 	},
 	"dependencies": {
 		"@aws-sdk/client-s3": "^3.962.0",

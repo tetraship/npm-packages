@@ -17,6 +17,10 @@
 		"pnpm",
 		"workspace"
 	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/tetraship/npm-packages.git"
+	},
 	"author": "Tetraship",
 	"license": "MIT",
 	"devDependencies": {
