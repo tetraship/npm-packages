@@ -139,4 +139,5 @@ jobs:
             @semantic-release/git
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: "dummy"
           NPM_CONFIG_PROVENANCE: true
