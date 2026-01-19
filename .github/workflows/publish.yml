@@ -1,3 +1,50 @@
+# =============================================================================
+# NPM Package Publishing with OIDC Trusted Publishing
+# =============================================================================
+#
+# This workflow uses npm's OIDC (OpenID Connect) Trusted Publishing feature
+# to publish packages WITHOUT requiring a long-lived NPM_TOKEN secret.
+#
+# HOW OIDC TRUSTED PUBLISHING WORKS:
+# ----------------------------------
+# Instead of using a static NPM access token, npm verifies the identity of
+# the GitHub Actions workflow using OIDC tokens. This is more secure because:
+#   1. No long-lived secrets to manage or rotate
+#   2. Publishing is tied to specific workflows in specific repositories
+#   3. Provenance attestations are automatically generated
+#
+# CRITICAL REQUIREMENTS:
+# ----------------------
+# 1. id-token: write permission (set below) - allows GitHub to generate OIDC tokens
+# 2. @semantic-release/npm v13.1.0+ - added OIDC support in October 2025
+# 3. npm CLI 11.5.1+ - required for OIDC token exchange (Node 22 has npm 10.x!)
+# 4. Trusted publisher configured on npmjs.com for EACH package
+# 5. DO NOT SET NPM_TOKEN - any value (even "dummy" or "") breaks OIDC!
+#
+# COMMON MISTAKES THAT BREAK OIDC:
+# --------------------------------
+# - Setting NPM_TOKEN="dummy" or NPM_TOKEN="" - npm tries to use it instead of OIDC
+# - Using old @semantic-release/npm (< v13.1.0) - no OIDC support
+# - Using npm < 11.5.1 - OIDC token exchange not supported
+# - Not configuring trusted publisher on npmjs.com
+# - Wrong workflow filename in npmjs.com trusted publisher config
+#
+# NPMJS.COM SETUP (required for each package):
+# --------------------------------------------
+# 1. Go to npmjs.com -> Your Package -> Settings -> Trusted Publisher
+# 2. Click "GitHub Actions"
+# 3. Fill in:
+#    - Organization/User: tetraship
+#    - Repository: npm-packages
+#    - Workflow filename: publish.yml  <-- MUST match this file's name!
+#    - Environment: publish            <-- MUST match the environment below!
+# 4. Click "Set up connection"
+#
+# NOTE: First-time package publishes cannot use OIDC - you must publish the
+# initial version manually or with a real token, THEN configure trusted publishing.
+#
+# =============================================================================
+
 name: Publish
 
 on:
@@ -5,11 +52,18 @@ on:
     branches:
       - main
 
+# -----------------------------------------------------------------------------
+# PERMISSIONS
+# -----------------------------------------------------------------------------
+# id-token: write is REQUIRED for OIDC trusted publishing
+# This allows GitHub Actions to request an OIDC token that npm uses to verify
+# the workflow's identity instead of requiring an NPM_TOKEN secret.
+# -----------------------------------------------------------------------------
 permissions:
-  contents: write
-  issues: write
-  pull-requests: write
-  id-token: write
+  contents: write      # For semantic-release to push tags and changelog
+  issues: write        # For semantic-release GitHub plugin
+  pull-requests: write # For semantic-release GitHub plugin
+  id-token: write      # CRITICAL: Required for OIDC trusted publishing to npm
 
 jobs:
   detect-changes:
@@ -70,6 +124,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-changes
     if: needs.detect-changes.outputs.any_changed == 'true'
+    # -------------------------------------------------------------------------
+    # ENVIRONMENT
+    # -------------------------------------------------------------------------
+    # This environment name MUST match what you configure in npmjs.com's
+    # trusted publisher settings. If they don't match, OIDC auth will fail.
+    # -------------------------------------------------------------------------
     environment: publish
     strategy:
       matrix:
@@ -109,12 +169,35 @@ jobs:
         with:
           version: 10
 
+      # -----------------------------------------------------------------------
+      # NODE.JS VERSION
+      # -----------------------------------------------------------------------
+      # OIDC trusted publishing requires npm 11.5.1+
+      # - Node.js 22 ships with npm 10.x (TOO OLD - won't work!)
+      # - Node.js 24 ships with npm 11.x (should work)
+      #
+      # If you must use Node 22, add a step to upgrade npm:
+      #   run: npm install -g npm@latest
+      # -----------------------------------------------------------------------
       - name: Setup Node.js
         if: matrix.package.changed == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'pnpm'
+
+      # -----------------------------------------------------------------------
+      # UPGRADE NPM FOR OIDC SUPPORT
+      # -----------------------------------------------------------------------
+      # Node.js 22 ships with npm 10.x, but OIDC trusted publishing requires
+      # npm 11.5.1 or later. This step ensures we have the required version.
+      # -----------------------------------------------------------------------
+      - name: Upgrade npm for OIDC trusted publishing support
+        if: matrix.package.changed == 'true'
+        run: |
+          echo "Current npm version: $(npm --version)"
+          npm install -g npm@latest
+          echo "Upgraded npm version: $(npm --version)"
 
       - name: Install dependencies
         if: matrix.package.changed == 'true'
@@ -128,6 +211,29 @@ jobs:
         if: matrix.package.changed == 'true'
         run: npm audit signatures
 
+      # -----------------------------------------------------------------------
+      # SEMANTIC RELEASE WITH OIDC
+      # -----------------------------------------------------------------------
+      # Key points:
+      #
+      # 1. @semantic-release/npm@13 - MUST use v13.1.0+ for OIDC support
+      #    The default version bundled with semantic-release v24 is older and
+      #    does NOT support OIDC. We explicitly request v13 to get OIDC support.
+      #
+      # 2. NO NPM_TOKEN - DO NOT set NPM_TOKEN in env!
+      #    - Setting NPM_TOKEN="dummy" BREAKS OIDC (npm tries to use the dummy token)
+      #    - Setting NPM_TOKEN="" BREAKS OIDC (empty string is still a value)
+      #    - The ONLY way OIDC works is if NPM_TOKEN is completely UNSET
+      #
+      # 3. NO NPM_CONFIG_PROVENANCE - With OIDC, provenance is automatic
+      #    When using trusted publishing, npm automatically generates provenance
+      #    attestations without needing the --provenance flag or env var.
+      #
+      # 4. GITHUB_TOKEN is still needed for:
+      #    - Creating GitHub releases
+      #    - Pushing changelog/version commits
+      #    - Creating release notes
+      # -----------------------------------------------------------------------
       - name: Semantic Release
         if: matrix.package.changed == 'true'
         uses: cycjimmy/semantic-release-action@v6
@@ -137,7 +243,16 @@ jobs:
           extra_plugins: |
             @semantic-release/changelog
             @semantic-release/git
+            @semantic-release/npm@13
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: "dummy"
-          NPM_CONFIG_PROVENANCE: true
+          # ===================================================================
+          # DO NOT ADD NPM_TOKEN HERE!
+          # ===================================================================
+          # OIDC trusted publishing works by NOT having an NPM_TOKEN.
+          # If you set NPM_TOKEN to ANY value (including "dummy" or ""),
+          # npm will try to use that token instead of OIDC, and it will fail.
+          #
+          # The id-token: write permission + @semantic-release/npm@13 + npm 11.5.1+
+          # together enable OIDC authentication automatically.
+          # ===================================================================

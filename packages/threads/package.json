@@ -10,7 +10,9 @@
     "persistence",
     "history",
     "messaging",
-    "conversation"
+    "conversation",
+    "activities",
+    "storage"
   ],
   "repository": {
     "type": "git",
