@@ -3,6 +3,15 @@
   "version": "0.0.1",
   "type": "module",
   "description": "React components and hooks for building AI agent chat interfaces with AI SDK v6",
+  "keywords": [
+    "react",
+    "ai",
+    "chat",
+    "agent",
+    "hooks",
+    "sdk",
+    "tetraship"
+  ],
   "exports": {
     ".": "./src/index.ts",
     "./components": "./src/components/index.ts",

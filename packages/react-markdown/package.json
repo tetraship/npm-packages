@@ -1,9 +1,16 @@
 {
 	"name": "@tetraship/react-markdown",
-	"version": "0.0.1",
-	"description": "Tetraship React Markdown components",
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
+	        "version": "0.0.1",
+	        "description": "Tetraship React Markdown components",
+	        "keywords": [
+	                "react",
+	                "markdown",
+	                "components",
+	                "mdx",
+	                "syntax-highlighting",
+	                "tetraship"
+	        ],
+	        "main": "dist/index.js",	"types": "dist/index.d.ts",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",

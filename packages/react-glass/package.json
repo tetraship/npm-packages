@@ -2,6 +2,14 @@
   "name": "@tetraship/react-glass",
   "version": "0.0.1",
   "description": "Tetraship React glassmorphism components",
+  "keywords": [
+    "react",
+    "components",
+    "ui",
+    "glassmorphism",
+    "design-system",
+    "tetraship"
+  ],
   "main": "index.ts",
   "types": "index.ts",
   "exports": {

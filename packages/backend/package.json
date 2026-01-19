@@ -36,7 +36,10 @@
 		"tetraship",
 		"utilities",
 		"auth",
-		"database"
+		"database",
+		"server",
+		"api",
+		"s3"
 	],
 	"author": "Tetraship",
 	"license": "MIT",
