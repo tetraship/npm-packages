@@ -212,6 +212,42 @@ jobs:
         run: npm audit signatures
 
       # -----------------------------------------------------------------------
+      # DEBUG: Verify npm and plugin versions
+      # -----------------------------------------------------------------------
+      # This helps diagnose OIDC issues by showing exactly which versions
+      # are installed and being used.
+      # -----------------------------------------------------------------------
+      - name: Debug - Check npm version
+        if: matrix.package.changed == 'true'
+        run: |
+          echo "=== npm version ==="
+          npm --version
+          echo ""
+          echo "=== node version ==="
+          node --version
+
+      - name: Debug - Check semantic-release bundled plugin version
+        if: matrix.package.changed == 'true'
+        run: |
+          echo "=== Bundled @semantic-release/npm version (in action) ==="
+          cat /home/runner/work/_actions/cycjimmy/semantic-release-action/v6/node_modules/semantic-release/node_modules/@semantic-release/npm/package.json | grep '"version"' || echo "Could not find bundled version"
+          echo ""
+          echo "=== Checking if extra_plugins installed v13 ==="
+          npm list @semantic-release/npm --all 2>/dev/null || echo "Not found in project node_modules"
+          echo ""
+          echo "=== All semantic-release related packages ==="
+          npm list 2>/dev/null | grep -i semantic || true
+
+      - name: Debug - Check action's full dependency tree
+        if: matrix.package.changed == 'true'
+        run: |
+          echo "=== Action's semantic-release version ==="
+          cat /home/runner/work/_actions/cycjimmy/semantic-release-action/v6/node_modules/semantic-release/package.json | grep '"version"'
+          echo ""
+          echo "=== Action's @semantic-release/npm location and version ==="
+          find /home/runner/work/_actions/cycjimmy/semantic-release-action/v6/node_modules -name "package.json" -path "*/@semantic-release/npm/*" -exec grep -l "version" {} \; | head -5 | xargs -I {} sh -c 'echo "File: {}"; grep "version" {}'
+
+      # -----------------------------------------------------------------------
       # SEMANTIC RELEASE WITH OIDC
       # -----------------------------------------------------------------------
       # Key points:
@@ -246,6 +282,7 @@ jobs:
             @semantic-release/npm@13
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEBUG: "semantic-release:*"  # Enable verbose logging for debugging
           # ===================================================================
           # DO NOT ADD NPM_TOKEN HERE!
           # ===================================================================
