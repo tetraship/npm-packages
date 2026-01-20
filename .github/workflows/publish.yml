@@ -214,26 +214,25 @@ jobs:
       # -----------------------------------------------------------------------
       # SEMANTIC RELEASE WITH OIDC
       # -----------------------------------------------------------------------
-      # We run semantic-release directly (not via cycjimmy action) to control
-      # exact package versions. The cycjimmy action bundles old @semantic-release/npm
-      # that doesn't support OIDC, and extra_plugins doesn't override it.
+      # semantic-release and @semantic-release/npm@13 are installed as root
+      # devDependencies. This ensures we use v13 with OIDC support, not the
+      # old bundled version that other approaches would resolve to.
       #
       # Key points:
-      # 1. @semantic-release/npm@13 - MUST use v13.1.0+ for OIDC support
+      # 1. @semantic-release/npm@13 - installed at root, has OIDC support
       # 2. NO NPM_TOKEN - OIDC requires NPM_TOKEN to be completely UNSET
       # 3. GITHUB_TOKEN is needed for GitHub releases and pushing commits
       # -----------------------------------------------------------------------
+      - name: Verify @semantic-release/npm version
+        if: matrix.package.changed == 'true'
+        run: |
+          echo "=== Installed @semantic-release/npm version ==="
+          pnpm list @semantic-release/npm
+
       - name: Semantic Release
         if: matrix.package.changed == 'true'
         working-directory: ${{ matrix.package.path }}
-        run: |
-          npx -y \
-            -p semantic-release@24 \
-            -p @semantic-release/changelog \
-            -p @semantic-release/git \
-            -p @semantic-release/npm@13 \
-            -p @semantic-release/github \
-            semantic-release
+        run: pnpm exec semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEBUG: "semantic-release:*"
