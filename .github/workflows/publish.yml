@@ -214,46 +214,32 @@ jobs:
       # -----------------------------------------------------------------------
       # SEMANTIC RELEASE WITH OIDC
       # -----------------------------------------------------------------------
+      # We run semantic-release directly (not via cycjimmy action) to control
+      # exact package versions. The cycjimmy action bundles old @semantic-release/npm
+      # that doesn't support OIDC, and extra_plugins doesn't override it.
+      #
       # Key points:
-      #
       # 1. @semantic-release/npm@13 - MUST use v13.1.0+ for OIDC support
-      #    The default version bundled with semantic-release v24 is older and
-      #    does NOT support OIDC. We explicitly request v13 to get OIDC support.
-      #
-      # 2. NO NPM_TOKEN - DO NOT set NPM_TOKEN in env!
-      #    - Setting NPM_TOKEN="dummy" BREAKS OIDC (npm tries to use the dummy token)
-      #    - Setting NPM_TOKEN="" BREAKS OIDC (empty string is still a value)
-      #    - The ONLY way OIDC works is if NPM_TOKEN is completely UNSET
-      #
-      # 3. NO NPM_CONFIG_PROVENANCE - With OIDC, provenance is automatic
-      #    When using trusted publishing, npm automatically generates provenance
-      #    attestations without needing the --provenance flag or env var.
-      #
-      # 4. GITHUB_TOKEN is still needed for:
-      #    - Creating GitHub releases
-      #    - Pushing changelog/version commits
-      #    - Creating release notes
+      # 2. NO NPM_TOKEN - OIDC requires NPM_TOKEN to be completely UNSET
+      # 3. GITHUB_TOKEN is needed for GitHub releases and pushing commits
       # -----------------------------------------------------------------------
+      - name: Install semantic-release with OIDC-compatible npm plugin
+        if: matrix.package.changed == 'true'
+        run: |
+          npm install --no-save \
+            semantic-release@24 \
+            @semantic-release/changelog \
+            @semantic-release/git \
+            @semantic-release/npm@13 \
+            @semantic-release/github
+          echo "=== Installed @semantic-release/npm version ==="
+          npm list @semantic-release/npm
+
       - name: Semantic Release
         if: matrix.package.changed == 'true'
-        uses: cycjimmy/semantic-release-action@v6
-        with:
-          working_directory: ${{ matrix.package.path }}
-          semantic_version: 24
-          extra_plugins: |
-            @semantic-release/changelog
-            @semantic-release/git
-            @semantic-release/npm@13
+        working-directory: ${{ matrix.package.path }}
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEBUG: "semantic-release:*"  # Enable verbose logging for debugging
-          # ===================================================================
-          # DO NOT ADD NPM_TOKEN HERE!
-          # ===================================================================
-          # OIDC trusted publishing works by NOT having an NPM_TOKEN.
-          # If you set NPM_TOKEN to ANY value (including "dummy" or ""),
-          # npm will try to use that token instead of OIDC, and it will fail.
-          #
-          # The id-token: write permission + @semantic-release/npm@13 + npm 11.5.1+
-          # together enable OIDC authentication automatically.
-          # ===================================================================
+          DEBUG: "semantic-release:*"
+          # DO NOT ADD NPM_TOKEN - OIDC requires it to be completely UNSET
