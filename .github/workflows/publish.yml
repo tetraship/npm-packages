@@ -223,22 +223,17 @@ jobs:
       # 2. NO NPM_TOKEN - OIDC requires NPM_TOKEN to be completely UNSET
       # 3. GITHUB_TOKEN is needed for GitHub releases and pushing commits
       # -----------------------------------------------------------------------
-      - name: Install semantic-release with OIDC-compatible npm plugin
-        if: matrix.package.changed == 'true'
-        run: |
-          npm install --no-save \
-            semantic-release@24 \
-            @semantic-release/changelog \
-            @semantic-release/git \
-            @semantic-release/npm@13 \
-            @semantic-release/github
-          echo "=== Installed @semantic-release/npm version ==="
-          npm list @semantic-release/npm
-
       - name: Semantic Release
         if: matrix.package.changed == 'true'
         working-directory: ${{ matrix.package.path }}
-        run: npx semantic-release
+        run: |
+          npx -y \
+            -p semantic-release@24 \
+            -p @semantic-release/changelog \
+            -p @semantic-release/git \
+            -p @semantic-release/npm@13 \
+            -p @semantic-release/github \
+            semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEBUG: "semantic-release:*"
