@@ -132,6 +132,9 @@ jobs:
     # -------------------------------------------------------------------------
     environment: publish
     strategy:
+      # Run releases sequentially to prevent race conditions when pushing to main
+      # Multiple packages pushing changelog/package.json changes simultaneously will fail
+      max-parallel: 1
       matrix:
         package:
           - name: backend
