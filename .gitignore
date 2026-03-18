@@ -141,3 +141,6 @@ vite.config.ts.timestamp-*
 # direnv
 .direnv
 .envrc
+
+# Storybook build output
+storybook-static/
